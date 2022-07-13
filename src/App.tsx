@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
-import "./App.css";
-import { strict } from "assert";
+import Header from "./components/Header/header";
+import Map from "./components/Map/map";
+import { CssBaseline,Grid } from '@material-ui/core';
+import HopitalList from "./components/List/list";
+
 
 type cords = { lat: number; long: number };
 
@@ -23,12 +26,11 @@ function App() {
       alert(" Location is not enabled ");
     }
   });
-  console.log(currLocation);
+ 
 
   const getHospitals = (): void => {
     const lat = currLocation?.lat;
     const long = currLocation?.long;
-    console.log(long, lat);
 
     const proxyAddress: string = "https://cors-anywhere.herokuapp.com/";
     const hospital_url: string =
@@ -38,14 +40,20 @@ function App() {
       .then((resp) => resp.json())
       .then((data) => setResult(data.results));
   };
+  
   return (
-    <div className="App">
-      <input
-        value={radius}
-        onChange={(e) => setRadius(e.target.value)}
-        placeholder="please insert radius in km"/>
-      <button onClick={getHospitals}>Find Nearest Hospitals</button>
-    </div>
+    <>
+      <CssBaseline/>
+      <Header />
+      <Grid container spacing={3} style={{width: '100%'}}>
+        <Grid item xs={12} md={4}>
+          <HopitalList />
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <Map />
+        </Grid>
+      </Grid>
+    </>
   );
 }
 
